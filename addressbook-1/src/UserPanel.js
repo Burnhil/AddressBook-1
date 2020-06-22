@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 const UserName = (props) => {
     let userNameJSX = null;
     //console.log(props.name);
     if(props.name !== null && typeof props.name === 'object'){
-        userNameJSX = <p key={props.name.title}>{props.name.title} {props.name.first} {props.name.last}</p>
+        userNameJSX = <p className="group1" key={props.name.title}>{props.name.title} {props.name.first} {props.name.last}</p>
     }
     
     return userNameJSX;
@@ -14,7 +14,7 @@ const UserDOB = (props) => {
     let userDOBJSX = null;
     //console.log(props);
     if(props.dob !== null && typeof props.dob === 'object'){
-    userDOBJSX = <p key={props.dob.date} >Age: {props.dob.age} Born on: {props.dob.date} </p>
+    userDOBJSX = <p className="group1" key={props.dob.date} >Age: {props.dob.age} Born on: {props.dob.date} </p>
     }
     return userDOBJSX;
 }
@@ -23,7 +23,7 @@ const UserPic = (props) =>{
     let userPicJSX = null;
 
     if(props.picture !== null && typeof props.picture === 'object'){
-    userPicJSX = <img src={props.picture.thumbnail} alt="user"></img>
+    userPicJSX = <div className="pictures"><img src={props.picture.thumbnail} alt="user"></img></div>
 
     }
     return userPicJSX;
@@ -32,7 +32,7 @@ const UserPic = (props) =>{
 const UserID = (props) => {
     let userIdJsx = null;
     if(props.id !== null && typeof props.id === 'object'){
-    userIdJsx = <p key={props.id.name}>User ID: {props.id.name} {props.id.value}</p>
+    userIdJsx = <p className="group1" key={props.id.name}>User ID: {props.id.name} {props.id.value}</p>
     }
 
     return userIdJsx
@@ -41,7 +41,7 @@ const UserID = (props) => {
 const UserRegistered = (props) => {
     let userRegisteredJSX = null;
     if(props.registered !== null && typeof props.registered === 'object'){
-    userRegisteredJSX = <p>Registered at the age of {props.registered.age} on {props.registered.date}</p>
+    userRegisteredJSX = <p className="group1">Registered at the age of {props.registered.age} on {props.registered.date}</p>
     }
     return userRegisteredJSX;
 }
@@ -91,40 +91,81 @@ const UserLocation = (props) => {
     return userLocationJSX;
 }
 
-const change = (e) =>{
 
-    console.log("button clicked");
-}
 
-const UserPanel = (props) => {
+class UserPanel extends Component{
 
-    if(props.user !== null){
-        let topLevelListItem = [];
+    constructor(props){
+        super(props);
+    
+        this.state= {
+        isClicked: false
+        };
+      }
 
-         console.log(props.user);
-         //console.log(props.user.dob);
 
-        for (let [key, value] of Object.entries(props.user)) {
-            if(typeof value !== 'object'){
-                topLevelListItem.push(<li key={key}>{key}: {value}</li>)
+      change = (e) =>{
+
+        // console.log("button clicked");
+        // let index = e.target.getAttribute("index");
+        // console.log(index);
+        // //let userDiv = e.target.closest(`#${index}`);
+        // let userDiv = e.target.closest("div");
+        //console.log(userDiv)
+        //userDiv should be the div with the id of the assigned uuid retieved from the button clicked
+        // if(!this.state.clicked){
+    
+        // }
+        console.log(this.state.isClicked);
+        this.setState({isClicked: !this.state.isClicked});
+
+    
+    }
+ 
+       render() {
+
+        if(this.props.user !== null){
+            let topLevelListItem = [];
+    
+             console.log(this.props.user);
+             //console.log(props.user.dob);
+    
+            for (let [key, value] of Object.entries(this.props.user)) {
+                if(typeof value !== 'object'){
+                    topLevelListItem.push(<ul><li key={key}>{key}: {value}</li></ul>)
+                }
+    
             }
-
+    
+        let panelInfo = null;
+        if(this.state.isClicked === true){
+            panelInfo = (<div id={this.props.user.login.uuid} className="fullUserInfo">
+                <ul><h1 className="headers1">The User Info</h1></ul>
+                    
+                    <UserPic className="picture" picture={this.props.user.picture}/>
+                    <UserName className="users" name={this.props.user.name}/>
+                    <UserDOB className="dob" dob={this.props.user.dob}/>
+                    <UserRegistered className="registered " registered={this.props.user.registered}/>
+                    {topLevelListItem}
+                    <UserID className="userId" id={this.props.user.id}/>
+                    <UserLocation className="location" location={this.props.user.location} />
+                    <UserLogin className="login" login={this.props.user.login}/>
+                    <button key="props.user" index={this.props.user.login.uuid} onClick={() => this.change("props.user")}>show details</button>      
+                   
+                </div>)
+        }else{
+            panelInfo = (<div id={this.props.user.login.uuid}>
+                <ul><h1 className="headers1">The User Info</h1></ul>
+                    <UserPic className="picture" picture={this.props.user.picture}/>    
+                    <UserName className="users" name={this.props.user.name}/>
+                    
+                    <div className="center"><button key="props.user" index={this.props.user.login.uuid} onClick={() => this.change("props.user")}>show details</button></div>  
+                </div>)
+                  
         }
-
-        
-    return <div>
-    <ul><h1 className="headers1">The User Info</h1></ul>
-        <UserName className="users" name={props.user.name}/>
-        <UserPic className="picture" picture={props.user.picture}/>
-        <UserDOB className="dob" dob={props.user.dob}/>
-        <UserID className="userId" id={props.user.id}/>
-        <UserRegistered className="registered" registered={props.user.registered}/>
-        <UserLogin className="login" login={props.user.login}/>
-        <UserLocation className="location" location={props.user.location} />
-        <button key="props.user" onChange={e => this.change(e)}>show details</button>
-        
-        <ul>{topLevelListItem}</ul>
-    </div>
+        return panelInfo;
+   
+       }
 
     }
 
