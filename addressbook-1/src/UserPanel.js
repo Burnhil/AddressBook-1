@@ -91,6 +91,11 @@ const UserLocation = (props) => {
     return userLocationJSX;
 }
 
+const change = (e) =>{
+
+    console.log("button clicked");
+}
+
 const UserPanel = (props) => {
 
     if(props.user !== null){
@@ -116,6 +121,7 @@ const UserPanel = (props) => {
         <UserRegistered className="registered" registered={props.user.registered}/>
         <UserLogin className="login" login={props.user.login}/>
         <UserLocation className="location" location={props.user.location} />
+        <button key="props.user" onChange={e => this.change(e)}>show details</button>
         
         <ul>{topLevelListItem}</ul>
     </div>
