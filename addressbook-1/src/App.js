@@ -13,8 +13,8 @@ class App extends Component {
     };
   }
 
-  //get the data
-
+  
+  //fetch method to be called when app starts
   fetchData(){
     //use fetch funtion and callback to transform the data to the JSON structure
     fetch("https://randomuser.me/api?results=25")
@@ -42,14 +42,13 @@ class App extends Component {
     
     //console.log(console.log(this.state.theUsers[0]));
 
+    //create each user panel to be rendered
     let theUsersPanels = [];
     for(let i = 0; i < this.state.theUsers.length; i++){
     theUsersPanels.push(<div className="eachPanel"><UserPanel key={this.state.theUsers[i]} user={this.state.theUsers[i]} /></div>);
     }
 
-    // console.log(theUsersPanels[4]);
-    // console.log(theUsersPanels.length);
-
+    //display returned user panels
     return (
       <div className="App">
 
